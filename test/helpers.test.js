@@ -14,6 +14,9 @@ const goodSchema = new mongoose.Schema({
   address: String,
   phone: String,
   birthday: String,
+  nested: {
+    thing: String
+  }
 });
 goodSchema.permissions = {
   defaults: {
@@ -22,8 +25,8 @@ goodSchema.permissions = {
     create: false,
   },
   admin: {
-    read: ['address', 'phone', 'birthday'],
-    write: ['address', 'phone', 'birthday'],
+    read: ['address', 'phone', 'birthday', 'nested', 'nested.thing'],
+    write: ['address', 'phone', 'birthday', 'nested', 'nested.thing'],
     create: true,
     remove: true,
   },
@@ -145,7 +148,7 @@ module.exports = {
     );
     test.deepEqual(
       getAuthorizedFields(goodSchema, { authLevel: 'admin' }, 'read').sort(),
-      ['_id', 'name', 'address', 'phone', 'birthday'].sort(),
+      ['_id', 'name', 'address', 'phone', 'birthday', 'nested', 'nested.thing'].sort(),
     );
     test.deepEqual(
       getAuthorizedFields(goodSchema, { authLevel: 'stranger' }, 'read').sort(),
@@ -153,7 +156,7 @@ module.exports = {
     );
     test.deepEqual(
       getAuthorizedFields(goodSchema, { authLevel: ['self', 'admin'] }, 'read').sort(),
-      ['_id', 'name', 'address', 'phone', 'birthday'].sort(),
+      ['_id', 'name', 'address', 'phone', 'birthday','nested', 'nested.thing'].sort(),
     );
     test.deepEqual(
       getAuthorizedFields(goodSchema, { authLevel: 'self' }, 'write').sort(),
