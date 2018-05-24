@@ -1,4 +1,5 @@
 # mongoose-authz
+[![Build Status](https://travis-ci.org/devcolor/mongoose-authz.svg)](https://travis-ci.org/devcolor/mongoose-authz)
 
 This plugin allows you to define a custom authorization scheme on your mongoose models.
 
