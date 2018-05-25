@@ -38,17 +38,16 @@ const carSeed1 = {
   model: 'civic',
   year: 2015,
   plate: '29KHGV',
-}
+};
 
 const carSeed2 = {
   make: 'ford',
   model: 'focus',
   year: 2016,
   plate: 'IHW872',
-}
+};
 
 let userDocs;
-let carDocs;
 
 const { permissions } = User.schema;
 
@@ -78,9 +77,8 @@ module.exports = {
       user1.best_friend = user2;
       await user1.save({ authLevel: false });
       userDocs = [user1, user2];
-      const car1 = await new Car(carSeed1).save({ authLevel: false });
-      const car2 = await new Car(carSeed2).save({ authLevel: false });
-      carDocs = [car1, car2];
+      await new Car(carSeed1).save({ authLevel: false });
+      await new Car(carSeed2).save({ authLevel: false });
       callback();
     } catch (err) {
       callback(err);

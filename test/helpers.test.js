@@ -140,7 +140,7 @@ module.exports = {
       test.expect(1);
       try {
         await resolveAuthLevel(goodSchema, {}, {});
-      } catch(err) {
+      } catch (err) {
         test.ok(err);
       }
 
@@ -150,7 +150,7 @@ module.exports = {
       test.expect(1);
       try {
         await resolveAuthLevel(goodSchema, { authPayload: 'foo' }, false);
-      } catch(err) {
+      } catch (err) {
         test.ok(err);
       }
       test.done();
