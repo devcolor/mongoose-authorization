@@ -69,8 +69,8 @@ module.exports = {
   setUp: async (callback) => {
     try {
       // conveniently, these static methods go around our authorization hooks
-      await User.remove({});
-      await Car.remove({});
+      await mongoose.connection.collections.newusers.drop();
+      await mongoose.connection.collections.cars.drop();
 
       const user1 = await new User(userSeed1).save({ authLevel: false });
       const user2 = await new User(userSeed2).save({ authLevel: false });
