@@ -77,9 +77,8 @@ module.exports = {
       user1.best_friend = user2;
       await user1.save({ authLevel: false });
       userDocs = [user1, user2];
-      const car1 = await new Car(carSeed1).save({ authLevel: false });
-      const car2 = await new Car(carSeed2).save({ authLevel: false });
-      carDocs = [car1, car2];
+      await new Car(carSeed1).save({ authLevel: false });
+      await new Car(carSeed2).save({ authLevel: false });
       callback();
     } catch (err) {
       callback(err);
