@@ -9,6 +9,7 @@ const {
 } = require('./lib/helpers');
 
 const PermissionDeniedError = require('./lib/PermissionDeniedError');
+const IncompatibleMethodError = require('./lib/IncompatibleMethodError');
 
 module.exports = (schema) => {
   async function save(doc, options) {
@@ -142,5 +143,13 @@ module.exports = (schema) => {
     // Check just the blank document since nothing exists yet
     const authLevels = await resolveAuthLevel(schema, options, {});
     return hasPermission(this.schema, authLevels, 'create');
+  };
+
+  schema.statics.create = function cannotCreate() {
+    throw new IncompatibleMethodError('Model.create');
+  };
+
+  schema.statics.remove = function cannotRemove() {
+    throw new IncompatibleMethodError('Model.remove');
   };
 };
