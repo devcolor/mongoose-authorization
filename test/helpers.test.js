@@ -1,11 +1,9 @@
 const mongoose = require('mongoose');
 
-const {
-  resolveAuthLevel,
-  getAuthorizedFields,
-  hasPermission,
-  getUpdatePaths,
-} = require('../lib/helpers');
+const resolveAuthLevel = require('../src/resolveAuthLevel');
+const getAuthorizedFields = require('../src/getAuthorizedFields');
+const hasPermission = require('../src/hasPermission');
+const getUpdatePaths = require('../src/getUpdatePaths');
 
 // Set up a bunch of schemas for testing. We're not going to connect to the database
 // since these tests only depend on the schema definitions.

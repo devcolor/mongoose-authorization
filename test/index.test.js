@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const User = require('./user.schema');
 const Car = require('./car.schema');
-const PermissionDeniedError = require('../lib/PermissionDeniedError');
+const PermissionDeniedError = require('../src/PermissionDeniedError');
 
 const dbUri = 'mongodb://localhost:27017/mongooseAuthorization';
 

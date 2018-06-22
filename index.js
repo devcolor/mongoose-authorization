@@ -1,15 +1,12 @@
 const _ = require('lodash');
-const {
-  resolveAuthLevel,
-  getAuthorizedFields,
-  hasPermission,
-  authIsDisabled,
-  sanitizeDocumentList,
-  getUpdatePaths,
-} = require('./lib/helpers');
-
-const PermissionDeniedError = require('./lib/PermissionDeniedError');
-const IncompatibleMethodError = require('./lib/IncompatibleMethodError');
+const getAuthorizedFields = require('./src/getAuthorizedFields');
+const hasPermission = require('./src/hasPermission');
+const authIsDisabled = require('./src/authIsDisabled');
+const sanitizeDocumentList = require('./src/sanitizeDocumentList');
+const getUpdatePaths = require('./src/getUpdatePaths');
+const resolveAuthLevel = require('./src/resolveAuthLevel');
+const PermissionDeniedError = require('./src/PermissionDeniedError');
+const IncompatibleMethodError = require('./src/IncompatibleMethodError');
 
 module.exports = (schema) => {
   async function save(doc, options) {
