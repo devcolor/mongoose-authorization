@@ -1,6 +1,6 @@
 const test = require('ava');
 const mongoose = require('mongoose');
-const cleanAuthLevels = require('../src/cleanAuthLevels');
+// const cleanAuthLevels = require('../src/cleanAuthLevels');
 
 test.before((t) => {
   t.context.schema = new mongoose.Schema({ friend: String });
