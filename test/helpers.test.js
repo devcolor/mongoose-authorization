@@ -224,10 +224,6 @@ module.exports = {
     );
     test.done();
   },
-  authIsDisabled(test) {
-    // TODO fill in
-    test.done();
-  },
   embedPermissions(test) {
     // TODO fill in
     test.done();
