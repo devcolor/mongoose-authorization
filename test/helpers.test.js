@@ -224,14 +224,6 @@ module.exports = {
     );
     test.done();
   },
-<<<<<<< HEAD
-  embedPermissions(test) {
-=======
-  authIsDisabled(test) {
->>>>>>> Tests for embedPermissions
-    // TODO fill in
-    test.done();
-  },
   sanitizeDocument(test) {
     // TODO fill in
     test.done();
