@@ -22,7 +22,7 @@ test('Model.remove should be callable without the plugin installed', async (t) =
   const schema = new mongoose.Schema({ friend: String });
   const MyModel = mongoose.model('ModelRemoveWithoutPlugin', schema);
 
-  await t.notThrows(MyModel.remove({}).exec());
+  await t.notThrowsAsync(MyModel.remove({}).exec());
 });
 
 test.after.always(async () => {
