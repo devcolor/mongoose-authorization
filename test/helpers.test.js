@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const resolveAuthLevel = require('../src/resolveAuthLevel');
-const getAuthorizedFields = require('../src/getAuthorizedFields');
 const hasPermission = require('../src/hasPermission');
 const getUpdatePaths = require('../src/getUpdatePaths');
 
@@ -153,53 +152,6 @@ module.exports = {
       }
       test.done();
     },
-  },
-  getAuthorizedFields(test) {
-    test.deepEqual(
-      getAuthorizedFields(bareBonesSchema, 'foobar', 'read'),
-      [],
-    );
-    test.deepEqual(
-      getAuthorizedFields(goodSchema, ['defaults', 'foobar'], 'read').sort(),
-      ['_id', 'name'].sort(),
-    );
-    test.deepEqual(
-      getAuthorizedFields(goodSchema, ['defaults', 'admin'], 'read').sort(),
-      ['_id', 'name', 'address', 'phone', 'birthday'].sort(),
-    );
-    test.deepEqual(
-      getAuthorizedFields(goodSchema, ['defaults', 'stranger'], 'read').sort(),
-      ['_id', 'name'].sort(),
-    );
-    test.deepEqual(
-      getAuthorizedFields(goodSchema, ['defaults', 'self', 'admin'], 'read').sort(),
-      ['_id', 'name', 'address', 'phone', 'birthday'].sort(),
-    );
-    test.deepEqual(
-      getAuthorizedFields(goodSchema, ['defaults', 'self'], 'write').sort(),
-      ['address', 'phone'].sort(),
-    );
-    test.deepEqual(
-      getAuthorizedFields(bareBonesSchema, 'admin', 'write'),
-      [],
-    );
-    test.deepEqual(
-      getAuthorizedFields(goodSchema, ['defaults', 'hasVirtuals'], 'read').sort(),
-      ['_id', 'name', 'virtual_name'].sort(),
-      'virtuals should be included in the list of fields',
-    );
-    test.deepEqual(
-      getAuthorizedFields(goodSchema, ['defaults', 'nested_top'], 'read').sort(),
-      ['_id', 'name', 'nested'].sort(),
-      'top level nested field should be ok as authorized field',
-    );
-    test.deepEqual(
-      getAuthorizedFields(goodSchema, ['defaults', 'nested_deep'], 'read').sort(),
-      ['_id', 'name', 'nested.thing'].sort(),
-      'deeply nested field should be ok as authorized field',
-    );
-
-    test.done();
   },
   hasPermission(test) {
     test.equal(
