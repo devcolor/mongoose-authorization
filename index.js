@@ -8,7 +8,7 @@ const resolveAuthLevel = require('./src/resolveAuthLevel');
 const PermissionDeniedError = require('./src/PermissionDeniedError');
 const IncompatibleMethodError = require('./src/IncompatibleMethodError');
 
-module.exports = (schema) => {
+module.exports = (schema, installationOptions) => {
   async function save(doc, options) {
     const authLevels = await resolveAuthLevel(schema, options, doc);
     if (doc.isNew && !hasPermission(schema, authLevels, 'create')) {
@@ -142,11 +142,16 @@ module.exports = (schema) => {
     return hasPermission(this.schema, authLevels, 'create');
   };
 
-  schema.statics.create = function cannotCreate() {
-    throw new IncompatibleMethodError('Model.create');
-  };
+  const allowedMethods = _.get(installationOptions, 'allowedMethods');
+  if (!_.includes(allowedMethods, 'create')) {
+    schema.statics.create = function cannotCreate() {
+      throw new IncompatibleMethodError('Model.create');
+    };
+  }
 
-  schema.statics.remove = function cannotRemove() {
-    throw new IncompatibleMethodError('Model.remove');
-  };
+  if (!_.includes(allowedMethods, 'remove')) {
+    schema.statics.remove = function cannotRemove() {
+      throw new IncompatibleMethodError('Model.remove');
+    };
+  }
 };
