@@ -69,7 +69,7 @@ async function sanitizeDocumentList(schema, options, docs) {
   const multi = _.isArrayLike(docs);
 
   if (!multi) {
-    sanitizeDocument(schema, options, docs);
+    await sanitizeDocument(schema, options, docs);
     return;
   }
 
