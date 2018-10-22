@@ -12,11 +12,14 @@ function embedPermissions(schema, options, authLevels, doc) {
     throw new Error(`Cannot embed permissions into mongoose document at \`${permsKey}\`because the key is already present in the document. Please specify a custom key.`);
   }
 
-  doc[permsKey] = {
-    read: getAuthorizedFields(schema, authLevels, 'read'),
-    write: getAuthorizedFields(schema, authLevels, 'write'),
-    remove: hasPermission(schema, authLevels, 'remove'),
-  };
+  Object.defineProperty(doc, permsKey, {
+    value: {
+      read: getAuthorizedFields(schema, authLevels, 'read'),
+      write: getAuthorizedFields(schema, authLevels, 'write'),
+      remove: hasPermission(schema, authLevels, 'remove'),
+    },
+    writable: false,
+  });
 
   // Freeze the object so this data can't be altered (even accidentally)
   Object.freeze(doc[permsKey]);

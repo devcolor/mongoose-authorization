@@ -121,4 +121,10 @@ test('Verify that the permissions data cannot be changed', (t) => {
     Error,
     'The permissions object shouldn\'t be writable [remove]',
   );
+
+  t.throws(
+    () => { doc.permissions = {}; },
+    Error,
+    'The permissions field should not be writable',
+  );
 });
