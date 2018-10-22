@@ -5,17 +5,25 @@ const authIsDisabled = require('./src/authIsDisabled');
 const sanitizeDocumentList = require('./src/sanitizeDocumentList');
 const getUpdatePaths = require('./src/getUpdatePaths');
 const resolveAuthLevel = require('./src/resolveAuthLevel');
+const getEmbeddedPermission = require('./src/getEmbeddedPermission');
 const PermissionDeniedError = require('./src/PermissionDeniedError');
 const IncompatibleMethodError = require('./src/IncompatibleMethodError');
 
 module.exports = (schema, installationOptions) => {
   async function save(doc, options) {
-    const authLevels = await resolveAuthLevel(schema, options, doc);
-    if (doc.isNew && !hasPermission(schema, authLevels, 'create')) {
+    let authorizedFields = getEmbeddedPermission(doc, options, 'write');
+    let canCreate = false;
+
+    if (authorizedFields === undefined) {
+      const authLevels = await resolveAuthLevel(schema, options, doc);
+      authorizedFields = getAuthorizedFields(schema, authLevels, 'write');
+      canCreate = hasPermission(schema, authLevels, 'create');
+    }
+
+    if (doc.isNew && !canCreate) {
       throw new PermissionDeniedError('create');
     }
 
-    const authorizedFields = getAuthorizedFields(schema, authLevels, 'write');
     const modifiedPaths = doc.modifiedPaths();
     const discrepancies = _.difference(modifiedPaths, authorizedFields);
 
@@ -32,8 +40,14 @@ module.exports = (schema, installationOptions) => {
   }
 
   async function removeDoc(doc, options) {
-    const authLevels = await resolveAuthLevel(schema, options, doc);
-    if (!hasPermission(schema, authLevels, 'remove')) {
+    let canRemove = getEmbeddedPermission(doc, options, 'remove');
+
+    if (canRemove === undefined) {
+      const authLevels = await resolveAuthLevel(schema, options, doc);
+      canRemove = hasPermission(schema, authLevels, 'remove');
+    }
+
+    if (!canRemove) {
       throw new PermissionDeniedError('remove');
     }
   }
