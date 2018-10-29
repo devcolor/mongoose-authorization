@@ -1,8 +1,9 @@
+const _ = require('lodash');
 const getAuthorizedFields = require('./getAuthorizedFields');
 const hasPermission = require('./hasPermission');
 
 function embedPermissions(schema, options, authLevels, doc) {
-  if (!schema || !options || !options.permissions || !doc) { return; }
+  if (!schema || !options || !options.permissions || _.isEmpty(doc)) { return; }
 
   const permsKey = options.permissions === true ? 'permissions' : options.permissions;
 

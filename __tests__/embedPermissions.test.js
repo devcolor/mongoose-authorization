@@ -17,29 +17,36 @@ test.before((t) => {
 });
 
 test('No schema', (t) => {
-  const blankDoc = {};
+  const blankDoc = { _id: 'someId' };
   embedPermissions(false, { permissions: true }, ['manager'], blankDoc);
-  t.deepEqual(blankDoc, {}, 'Nothing should have been added to doc');
+  t.deepEqual(blankDoc, { _id: 'someId' }, 'Nothing should have been added to doc');
 });
 
 test('No document', (t) => {
   t.notThrows(() => { embedPermissions(t.context.schema, { permissions: true }, ['manager'], false); });
 });
 
+test('Do not embed permissions if doc is empty', (t) => {
+  const doc = {};
+  embedPermissions(t.context.schema, { permissions: true }, ['manager'], doc);
+
+  t.deepEqual(doc, {}, 'Should not add permissions when doc is empty object');
+});
+
 test('Options say to do nothing', (t) => {
-  const blankDoc = {};
+  const blankDoc = { _id: 'someId' };
   embedPermissions(t.context.schema, false, ['manager'], blankDoc);
-  t.deepEqual(blankDoc, {}, 'Should not add permissions for false options');
+  t.deepEqual(blankDoc, { _id: 'someId' }, 'Should not add permissions for false options');
 
   embedPermissions(t.context.schema, {}, ['manager'], blankDoc);
-  t.deepEqual(blankDoc, {}, 'Should not add permissions for {} options');
+  t.deepEqual(blankDoc, { _id: 'someId' }, 'Should not add permissions for {} options');
 
   embedPermissions(t.context.schema, { permissions: false }, ['manager'], blankDoc);
-  t.deepEqual(blankDoc, {}, 'Should not add permissions for { permissions: false} options');
+  t.deepEqual(blankDoc, { _id: 'someId' }, 'Should not add permissions for { permissions: false} options');
 });
 
 test('Permissions embeded under default key', (t) => {
-  const managerDoc = {};
+  const managerDoc = { _id: 'someId' };
   embedPermissions(t.context.schema, { permissions: true }, ['manager'], managerDoc);
   t.deepEqual(
     managerDoc.permissions,
@@ -51,7 +58,7 @@ test('Permissions embeded under default key', (t) => {
     'Incorrect permissions embedded',
   );
 
-  const defaultDoc = {};
+  const defaultDoc = { _id: 'someId' };
   embedPermissions(t.context.schema, { permissions: true }, [], defaultDoc);
   t.deepEqual(
     defaultDoc.permissions,
@@ -64,7 +71,7 @@ test('Permissions embeded under default key', (t) => {
   );
 });
 test('Permissions embded under custom key', (t) => {
-  const managerDoc = {};
+  const managerDoc = { _id: 'someId' };
   embedPermissions(t.context.schema, { permissions: 'customKey' }, ['manager'], managerDoc);
   t.deepEqual(
     managerDoc.customKey,
@@ -76,7 +83,7 @@ test('Permissions embded under custom key', (t) => {
     'Incorrect permissions embedded',
   );
 
-  const defaultDoc = {};
+  const defaultDoc = { _id: 'someId' };
   embedPermissions(t.context.schema, { permissions: 'customKey' }, [], defaultDoc);
   t.deepEqual(
     defaultDoc.customKey,
@@ -101,7 +108,7 @@ test('If there\'s already a permissions field', (t) => {
 });
 
 test('Verify that the permissions data cannot be changed', (t) => {
-  const doc = {};
+  const doc = { _id: 'foobar' };
   embedPermissions(t.context.schema, { permissions: true }, ['manager'], doc);
 
   t.throws(
